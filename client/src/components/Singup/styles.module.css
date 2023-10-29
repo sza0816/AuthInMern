@@ -78,6 +78,10 @@
 	text-align: center;
 }
 
+.success_msg{
+	background-color: #5cdd5c;
+}
+
 .white_btn,
 .green_btn {
 	border: none;
