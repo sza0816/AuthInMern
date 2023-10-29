@@ -5,7 +5,7 @@ const { User, validate } = require("../models/user");
 const bcrypt = require("bcrypt");
 
 // take token model as variable token
-const token = require("../models/token");
+const Token = require("../models/token");
 // take sendEmail function as variable sendEmail
 const sendEmail = require("../utils/sendEmail");
 // import crypto module for performing encryption and hashing operations
@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
 		}).save();
 
 		// generate link and send email
-		const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`;
+		const url = `${process.env.BASE_URL}users/${user._id}/verify/${Token.token}`;
 		await sendEmail(user.email, "Verify Email", url);
 
 
