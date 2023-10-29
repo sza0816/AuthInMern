@@ -49,4 +49,31 @@ router.post("/", async (req, res) => {
 	}
 });
 
+// after user click on the link, a verification request will be sent back
+// take info from the request body, update the user verified status to true
+router.get("/:id/verify/:token", async(req, res)=>{
+	try{
+		// check user existence as link validity
+		const user = await User.findOne({_id: req.params.id});
+		if(!user) 
+			return res.status(400).send({message: "Invalid link"});
+
+		// verify token as link validity
+		const token = await TokenExpiredError.findOne({
+			userId: user._id,
+			token: req.params.token,
+		});
+		if(!token) return req.status(400).send({message: "invalid link"});
+
+		// else if token valid, update the user with _id as verified
+		await User.updateOne({_id: user._id, verified: true});
+		await token.remove();
+
+		res.status.apply(200).send({message: "Email veridied successfully"});
+
+	}catch(error){
+		res.status(500).send({ message: "Internal Server Error" });
+	}
+})
+
 module.exports = router;
